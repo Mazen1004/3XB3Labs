@@ -73,6 +73,16 @@ def find_min_index(L, n):
             min_index = i
     return min_index
 
+#function to measure time taken for algorithm to run
+def measure_time(sort_function,list):
+    start_time = time.time()
+    sort_function(list)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    print(execution_time)
+    return execution_time
+
 
 # ******************* Experiment 1 *******************
 
@@ -87,31 +97,12 @@ def run_experiment1(run):
         list3 = create_random_list(x[2],maxVal)
         list4 = create_random_list(x[3],maxVal)
 
-        #function to measure time taken for algorithm to run
-        def measure_time(sort_String,list):
-            
-            if sort_String == 1:
-                start_time = time.time()
-                insertion_sort(list)
-            elif sort_String == 2:
-                start_time = time.time()
-                selection_sort(list)
-            elif sort_String == 3:
-                start_time = time.time()
-                bubble_sort(list)
-                    
-            end_time = time.time()
-            execution_time = end_time - start_time
-            
-            print(execution_time)
-            return execution_time
-
         #Running Insertion Sort
         print("INSERTION SORT TEST")
-        a=measure_time(1,list1)
-        b=measure_time(1,list2)
-        c=measure_time(1,list3)
-        d=measure_time(1,list4)
+        a=measure_time(insertion_sort,list1)
+        b=measure_time(insertion_sort,list2)
+        c=measure_time(insertion_sort,list3)
+        d=measure_time(insertion_sort,list4)
 
         y1= [a,b,c,d]
         # plotting the points 
@@ -119,10 +110,10 @@ def run_experiment1(run):
 
         #Running Selection Sort
         print("SELECTION SORT TEST")
-        e=measure_time(2,list1)
-        f=measure_time(2,list2)
-        g=measure_time(2,list3)
-        h=measure_time(2,list4)
+        e=measure_time(selection_sort,list1)
+        f=measure_time(selection_sort,list2)
+        g=measure_time(selection_sort,list3)
+        h=measure_time(selection_sort,list4)
 
         y2= [e,f,g,h]
         # plotting the points 
@@ -130,10 +121,10 @@ def run_experiment1(run):
         
         #Running Bubble Sort
         print("BUBBLE SORT TEST")
-        i=measure_time(3,list1)
-        j=measure_time(3,list2)
-        k=measure_time(3,list3)
-        l=measure_time(3,list4)
+        i=measure_time(bubble_sort,list1)
+        j=measure_time(bubble_sort,list2)
+        k=measure_time(bubble_sort,list3)
+        l=measure_time(bubble_sort,list4)
 
         y3= [i,j,k,l]
         # plotting the points 
@@ -158,7 +149,6 @@ def run_experiment1(run):
 
 def run_experiment2(run):
     if run:
-        # This is the traditional implementation of Insertion Sort.
         def insertion_sort2(L):
             for i in range(1, len(L)):
                 insert(L, i)
@@ -182,38 +172,22 @@ def run_experiment2(run):
         list3 = create_random_list(x[2],maxVal)
         list4 = create_random_list(x[3],maxVal)
 
-        #function to measure time taken for algorithm to run
-        def measure_time(sort_String,list):
-            
-            if sort_String == 1:
-                start_time = time.time()
-                insertion_sort(list)
-            elif sort_String == 2:
-                start_time = time.time()
-                insertion_sort2(list)
-            
-            end_time = time.time()
-            execution_time = end_time - start_time
-            
-            print(execution_time)
-            return execution_time
-
         #Running Insertion Sort
         print("INSERTION SORT TEST")
-        a=measure_time(1,list1)
-        b=measure_time(1,list2)
-        c=measure_time(1,list3)
-        d=measure_time(1,list4)
+        a=measure_time(insertion_sort,list1)
+        b=measure_time(insertion_sort,list2)
+        c=measure_time(insertion_sort,list3)
+        d=measure_time(insertion_sort,list4)
 
         y1= [a,b,c,d]
         # plotting the points 
         plt.plot(x, y1, label = "Insertion Sort")
         
         print("INSERTION SORT 2 TEST")
-        e=measure_time(2,list1)
-        f=measure_time(2,list2)
-        g=measure_time(2,list3)
-        h=measure_time(2,list4)
+        e=measure_time(insertion_sort2,list1)
+        f=measure_time(insertion_sort2,list2)
+        g=measure_time(insertion_sort2,list3)
+        h=measure_time(insertion_sort2,list4)
         
         y2= [e,f,g,h]
         # plotting the points 
@@ -237,20 +211,21 @@ def run_experiment2(run):
             last_unsorted_index = len(L)-1
             n = len(L)
             for i in range(n // 2):
-                print("Loop:")
-                print(i)
+                #print("Loop:")
+                #print(i)
                 min_index = find_min_index(L, i)
                 
                 swap(L, i, min_index)
-                print(my_list)
-                
+                #print(L)
+              
                 last_unsorted_index = len(L) - i - 1
                 #if max_index == last_unsorted_index:
                 #    max_index = min_index
                 max_index = find_max_index(L, i, last_unsorted_index)
                 swap(L, last_unsorted_index, max_index)
-                print(my_list)
-            print(my_list)
+                #print(L)
+            #print(L)
+          
  
         def find_min_index(L, n):
             min_index = n
@@ -263,11 +238,51 @@ def run_experiment2(run):
             for i in range(n+1, min(upper_limit+1, len(L))):
                 if L[i] > L[max_index]:
                     max_index = i
-            print(max_index)
+            #print(max_index)
             return max_index
         
-        my_list = [25, 64, 12, 22, 11]
-        selection_sort2(my_list)
+        list1 = create_random_list(x[0],maxVal) #List Length is 5, maximum value in list is 100
+        list2 = create_random_list(x[1],maxVal)
+        list3 = create_random_list(x[2],maxVal)
+        list4 = create_random_list(x[3],maxVal)
+        
+        #my_list = [25, 64, 12, 22, 11]
+        #selection_sort2(list1)
+        
+        #Running Selection Sort
+        print("SELECTION SORT TEST")
+        a=measure_time(selection_sort,list1)
+        b=measure_time(selection_sort,list2)
+        c=measure_time(selection_sort,list3)
+        d=measure_time(selection_sort,list4)
+
+        y1= [a,b,c,d]
+        # plotting the points 
+        plt.plot(x, y1, label = "Selection Sort")
+        
+        print("SELECTION SORT 2 TEST")
+        e=measure_time(selection_sort2,list1)
+        f=measure_time(selection_sort2,list2)
+        g=measure_time(selection_sort2,list3)
+        h=measure_time(selection_sort2,list4)
+        
+        y2= [e,f,g,h]
+        # plotting the points 
+        plt.plot(x, y2, label = "Selection Sort 2")
+        
+        # naming the x axis
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Experiment 2 Graph')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
 
 
 run_experiment1(False)
