@@ -5,7 +5,7 @@ Feel free to modify and/or add functions to this file.
 import random
 import time
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 # Create a random list length "length" containing whole numbers between 0 and max_value inclusive
 def create_random_list(length, max_value):
@@ -339,5 +339,110 @@ def run_experiment2(run):
 
 # ******************* Run the Experiment *******************
 
+# Experiment 3
+def runTimeTimer(sortingAlgo,nearSortList):
+    start_time = time.time()
+
+    # Call the sorting algorithm on the nearSortList
+    sortingAlgo(nearSortList)
+
+    # Record the end time
+    end_time = time.time()
+
+    # Calculate the runtime
+    runtime = end_time - start_time
+
+    # Return the sorted list and the runtime
+    print(runtime)
+    return runtime
+
+
+def experiment3(run):
+    #theoretically: swaps = n * log(n)/2
+
+    if run:
+
+        #constant swaps, list length increasing
+        listLength = [10,100,1000,10000]
+
+        constswaps = []
+        constswaps.append(create_near_sorted_list(listLength[0],100,10))
+        constswaps.append(create_near_sorted_list(listLength[1],100,10))
+        constswaps.append(create_near_sorted_list(listLength[2],100,10))
+        constswaps.append(create_near_sorted_list(listLength[3],100,10))
+
+        insertionSortOutput = []
+        bubbleSortOutput = []
+        selectionSortOutput = []
+
+        for testList in constswaps:
+
+            insertionSortOutput.append(runTimeTimer(insertion_sort,testList)) 
+            bubbleSortOutput.append(runTimeTimer(bubble_sort,testList))
+            selectionSortOutput.append(runTimeTimer(selection_sort,testList))
+        
+        #constant list size, increasing swap size
+        listSwaps = [10,100,1000,10000]
+
+        constList = []
+        constList.append(create_near_sorted_list(1000,100,listSwaps[0]))
+        constList.append(create_near_sorted_list(1000,100,listSwaps[1]))
+        constList.append(create_near_sorted_list(1000,100,listSwaps[2]))
+        constList.append(create_near_sorted_list(1000,100,listSwaps[3]))
+        
+        insertionSortOutput2 = []
+        bubbleSortOutput2 = []
+        selectionSortOutput2 = []
+
+        for testList in constList:
+            insertionSortOutput2.append(runTimeTimer(insertion_sort,testList)) 
+            bubbleSortOutput2.append(runTimeTimer(bubble_sort,testList))
+            selectionSortOutput2.append(runTimeTimer(selection_sort,testList))
+
+
+        #Constant Swap size Plot
+        plt.plot(listLength,insertionSortOutput,label = "Insertion Sort")
+        plt.plot(listLength,bubbleSortOutput,label = "Bubble Sort")
+        plt.plot(listLength,selectionSortOutput,label = "Selection Sort")
+
+        plt.yticks(np.arange(min(bubbleSortOutput), max(bubbleSortOutput)+1, 0.25))
+
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Variable List Length and Constant Swaps Experiment')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+
+
+        #Constant List Length Plot
+        plt.plot(listSwaps,insertionSortOutput2,label = "Insertion Sort")
+        plt.plot(listSwaps,bubbleSortOutput2,label = "Bubble Sort")
+        plt.plot(listSwaps,selectionSortOutput2,label = "Selection Sort")
+
+        plt.yticks(np.arange(min(bubbleSortOutput2), max(bubbleSortOutput2)+1, 0.25))
+
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Variable Swaps and Constant List Length Experiment')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+        
+
+
 run_experiment1(False)
-run_experiment2(True)
+run_experiment2(False)
+experiment3(True)
