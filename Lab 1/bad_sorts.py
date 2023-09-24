@@ -32,7 +32,8 @@ def swap(L, i, j):
 # ******************* Insertion sort code *******************
 
 # This is the traditional implementation of Insertion Sort.
-def insertion_sort(L):
+def insertion_sort(unsorted_list):
+    L=unsorted_list.copy() #to not affect orginal list
   
     for i in range(1, len(L)):
         insert(L, i)
@@ -50,7 +51,8 @@ def insert(L, i):
 # ******************* Bubble sort code *******************
 
 # Traditional Bubble sort
-def bubble_sort(L):
+def bubble_sort(unsorted_list):
+    L=unsorted_list.copy() #to not affect orginal list
     for i in range(len(L)):
         for j in range(len(L) - 1):
             if L[j] > L[j+1]:
@@ -60,7 +62,8 @@ def bubble_sort(L):
 # ******************* Selection sort code *******************
 
 # Traditional Selection sort
-def selection_sort(L):
+def selection_sort(unsorted_list):
+    L=unsorted_list.copy() #to not affect orginal list
     for i in range(len(L)):
         min_index = find_min_index(L, i)
         swap(L, i, min_index)
@@ -149,7 +152,8 @@ def run_experiment1(run):
 
 def run_experiment2(run):
     if run:
-        def insertion_sort2(L):
+        def insertion_sort2(unsorted_list):
+            L=unsorted_list.copy() #to not affect orginal list
             for i in range(1, len(L)):
                 insert(L, i)
 
@@ -207,7 +211,8 @@ def run_experiment2(run):
         # function to show the plot
         plt.show()
         
-        def selection_sort2(L):
+        def selection_sort2(unsorted_list):
+            L=unsorted_list.copy()
             last_unsorted_index = len(L)-1
             n = len(L)
             for i in range(n // 2):
@@ -219,8 +224,6 @@ def run_experiment2(run):
                 #print(L)
               
                 last_unsorted_index = len(L) - i - 1
-                #if max_index == last_unsorted_index:
-                #    max_index = min_index
                 max_index = find_max_index(L, i, last_unsorted_index)
                 swap(L, last_unsorted_index, max_index)
                 #print(L)
@@ -238,7 +241,6 @@ def run_experiment2(run):
             for i in range(n+1, min(upper_limit+1, len(L))):
                 if L[i] > L[max_index]:
                     max_index = i
-            #print(max_index)
             return max_index
         
         list1 = create_random_list(x[0],maxVal) #List Length is 5, maximum value in list is 100
@@ -246,8 +248,6 @@ def run_experiment2(run):
         list3 = create_random_list(x[2],maxVal)
         list4 = create_random_list(x[3],maxVal)
         
-        #my_list = [25, 64, 12, 22, 11]
-        #selection_sort2(list1)
         
         #Running Selection Sort
         print("SELECTION SORT TEST")
@@ -283,7 +283,61 @@ def run_experiment2(run):
         
         # function to show the plot
         plt.show()
+        
+        def bubble_sort2(unsorted_list):   
+            L=unsorted_list.copy() #to not affect orginal list
+            for i in range(len(L)):
+                for j in range(len(L) - 1, i, -1):
+                    if L[j] < L[j - 1]:
+                    # If the current element is smaller than the previous element,
+                    # shift the previous element up
+                        L[j], L[j - 1] = L[j - 1], L[j]
+                        swapped = True
+            return L
+        
+        list1 = create_random_list(x[0],maxVal) #List Length is 5, maximum value in list is 100
+        list2 = create_random_list(x[1],maxVal)
+        list3 = create_random_list(x[2],maxVal)
+        list4 = create_random_list(x[3],maxVal)
+        
+        
+        #Running Selection Sort
+        print("BUBBLE SORT TEST")
+        a=measure_time(bubble_sort,list1)
+        b=measure_time(bubble_sort,list2)
+        c=measure_time(bubble_sort,list3)
+        d=measure_time(bubble_sort,list4)
 
+        y1= [a,b,c,d]
+        # plotting the points 
+        plt.plot(x, y1, label = "Bubble Sort")
+        
+        print("SELECTION SORT 2 TEST")
+        e=measure_time(bubble_sort2,list1)
+        f=measure_time(bubble_sort2,list2)
+        g=measure_time(bubble_sort2,list3)
+        h=measure_time(bubble_sort2,list4)
+        
+        y2= [e,f,g,h]
+        # plotting the points 
+        plt.plot(x, y2, label = "Bubble Sort 2")
+        
+        # naming the x axis
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Experiment 2 Graph')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+
+
+# ******************* Run the Experiment *******************
 
 run_experiment1(False)
 run_experiment2(True)
