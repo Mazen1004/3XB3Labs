@@ -9,6 +9,14 @@ In contains traditional implementations for:
 
 Author: Vincent Maccio
 """
+import random
+import time
+import matplotlib.pyplot as plt
+import numpy as np
+
+def create_random_list(length, max_value):
+    print("test")
+    return [random.randint(0, max_value) for _ in range(length)]
 
 # ************ Quick Sort ************
 def quicksort(L):
@@ -146,4 +154,65 @@ class Heap:
         return s
 
 # *************************************
+
+def runTimeTimer(sortingAlgo,nearSortList):
     
+    copyNearSort = nearSortList.copy()
+    start_time = time.time()
+    
+    # Call the sorting algorithm on the nearSortList
+    sortingAlgo(copyNearSort)
+
+    # Record the end time
+    end_time = time.time()
+
+    # Calculate the runtime
+    runtime = end_time - start_time
+
+    # Return the sorted list and the runtime
+    print(runtime)
+    return runtime
+
+def experiment4(run):
+    if run:
+        listLength = [10,100,1000,10000]
+
+        quickSortOutput = []
+        mergeSortOutput = []
+        heapSortOutput = []
+
+        for length in listLength:
+
+            nearSortList = create_random_list(length, 1000)  # Adjust the parameters as needed
+            quick_sort_runtime = runTimeTimer(quicksort, nearSortList)
+            merge_sort_runtime = runTimeTimer(mergesort, nearSortList)
+            heap_sort_runtime = runTimeTimer(heapsort, nearSortList)
+
+            quickSortOutput.append(quick_sort_runtime)
+            mergeSortOutput.append(merge_sort_runtime)
+            heapSortOutput.append(heap_sort_runtime)
+
+
+        plt.plot(listLength,quickSortOutput,label = "Quick Sort")
+        plt.plot(listLength,mergeSortOutput,label = "Merge Sort")
+        plt.plot(listLength,heapSortOutput,label = "Heap Sort")
+
+        plt.yticks(np.arange(min(heapSortOutput), max(heapSortOutput)+1, 0.25))
+
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Variable List Length and Constant Swaps Experiment')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+
+
+# ============
+
+experiment4(True)
