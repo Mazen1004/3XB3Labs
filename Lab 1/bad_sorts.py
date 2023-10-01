@@ -60,8 +60,7 @@ def bubble_sort(L):
 # ******************* Selection sort code *******************
 
 # Traditional Selection sort
-def selection_sort(unsorted_list):
-    L=unsorted_list.copy() #to not affect orginal list
+def selection_sort(L):
     for i in range(len(L)):
         min_index = find_min_index(L, i)
         swap(L, i, min_index)
@@ -336,10 +335,12 @@ def run_experiment2(run):
 
 # Experiment 3
 def runTimeTimer(sortingAlgo,nearSortList):
+    
+    copyNearSort = nearSortList.copy()
     start_time = time.time()
-
+    
     # Call the sorting algorithm on the nearSortList
-    sortingAlgo(nearSortList)
+    sortingAlgo(copyNearSort)
 
     # Record the end time
     end_time = time.time()
@@ -370,28 +371,41 @@ def experiment3(run):
         bubbleSortOutput = []
         selectionSortOutput = []
 
+        print("Variable List Length Tests")
         for testList in constswaps:
-
+            print("Insertion Sort Test: ")
             insertionSortOutput.append(runTimeTimer(insertion_sort,testList)) 
+
+            print("Bubble Sort Test: ")
+
             bubbleSortOutput.append(runTimeTimer(bubble_sort,testList))
+
+            print("Selection Sort Test: ")
             selectionSortOutput.append(runTimeTimer(selection_sort,testList))
         
         #constant list size, increasing swap size
         listSwaps = [10,100,1000,10000]
 
         constList = []
-        constList.append(create_near_sorted_list(1000,100,listSwaps[0]))
-        constList.append(create_near_sorted_list(1000,100,listSwaps[1]))
-        constList.append(create_near_sorted_list(1000,100,listSwaps[2]))
-        constList.append(create_near_sorted_list(1000,100,listSwaps[3]))
+        constList.append(create_near_sorted_list(10000,10000,listSwaps[0]))
+        constList.append(create_near_sorted_list(10000,10000,listSwaps[1]))
+        constList.append(create_near_sorted_list(10000,10000,listSwaps[2]))
+        constList.append(create_near_sorted_list(10000,10000,listSwaps[3]))
         
         insertionSortOutput2 = []
         bubbleSortOutput2 = []
         selectionSortOutput2 = []
 
+        print("Variable Swaps Tests")
+
         for testList in constList:
+            print("Insertion Sort Test: ")
             insertionSortOutput2.append(runTimeTimer(insertion_sort,testList)) 
+
+            print("Bubble Sort Test: ")
             bubbleSortOutput2.append(runTimeTimer(bubble_sort,testList))
+
+            print("Selection Sort Test: ")
             selectionSortOutput2.append(runTimeTimer(selection_sort,testList))
 
 
@@ -421,9 +435,9 @@ def experiment3(run):
         plt.plot(listSwaps,bubbleSortOutput2,label = "Bubble Sort")
         plt.plot(listSwaps,selectionSortOutput2,label = "Selection Sort")
 
-        plt.yticks(np.arange(min(bubbleSortOutput2), max(bubbleSortOutput2)+1, 0.25))
+        plt.yticks(np.arange(0, max(bubbleSortOutput)+1, 1))
 
-        plt.xlabel('List Length')
+        plt.xlabel('Number of Swaps')
         # naming the y axis
         plt.ylabel('Time(s)')
         
@@ -440,5 +454,5 @@ def experiment3(run):
 # ******************* Run the Experiment *******************
 
 run_experiment1(False)
-run_experiment2(True)
-experiment3(False)
+run_experiment2(False)
+experiment3(True)
