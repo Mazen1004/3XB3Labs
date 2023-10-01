@@ -436,9 +436,127 @@ def experiment3(run):
         # function to show the plot
         plt.show()
         
+def run_experiment8(run):
+    #copying
+    def quicksort(L):
+        copy = quicksort_copy(L)
+        for i in range(len(L)):
+             L[i] = copy[i]
+
+
+    def quicksort_copy(L):
+        if len(L) < 2:
+           return L
+        pivot = L[0]
+        left, right = [], []
+        for num in L[1:]:
+            if num < pivot:
+                left.append(num)
+            else:
+                right.append(num)
+        return quicksort_copy(left) + [pivot] + quicksort_copy(right)
+    
+    
+    def mergesort(L):
+        if len(L) <= 1:
+           return
+        mid = len(L) // 2
+        left, right = L[:mid], L[mid:]
+
+        mergesort(left)
+        mergesort(right)
+        temp = merge(left, right)
+
+        for i in range(len(temp)):
+            L[i] = temp[i]
+
+
+    def merge(left, right):
+        L = []
+        i = j = 0
+ 
+        while i < len(left) or j < len(right):
+            if i >= len(left):
+                L.append(right[j])
+                j += 1
+            elif j >= len(right):
+                L.append(left[i])
+                i += 1
+            else:
+                if left[i] <= right[j]:
+                   L.append(left[i])
+                   i += 1
+                else:
+                   L.append(right[j])
+                   j += 1
+        return L
+    
+    if run:
+        #Creating Lists of Different Lengths
+        x = [10,25,40,55] #array of the list lengths
+        maxVal = 100 #max value of list length
+
+        list1 = create_random_list(x[0],maxVal) #List Length is 5, maximum value in list is 100
+        #list1=[1,2,4,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]
+        #list1 = [[5, 2, 8, 1, 9]]
+        list2 = create_random_list(x[1],maxVal)
+        list3 = create_random_list(x[2],maxVal)
+        list4 = create_random_list(x[3],maxVal)
+
+       
+        
+        print("MERGE SORT TEST")
+        e=measure_time(mergesort,list1)
+        f=measure_time(mergesort,list2)
+        g=measure_time(mergesort,list3)
+        h=measure_time(mergesort,list4)
+        
+        y2= [e,f,g,h]
+        # plotting the points 
+        plt.plot(x, y2, label = "Merge Sort")
+        
+        
+        print("QUICK SORT TEST")
+        i=measure_time(quicksort,list1)
+        j=measure_time(quicksort,list2)
+        k=measure_time(quicksort,list3)
+        l=measure_time(quicksort,list4)
+        
+        y3= [i,j,k,l]
+        # plotting the points 
+        plt.plot(x, y3, label = "Quick Sort")
+        
+         #Running Insertion Sort
+         
+        print("INSERTION SORT TEST")
+        a=measure_time(insertion_sort,list1)
+        b=measure_time(insertion_sort,list2)
+        c=measure_time(insertion_sort,list3)
+        d=measure_time(insertion_sort,list4)
+
+        y1= [a,b,c,d]
+        # plotting the points 
+        plt.plot(x, y1, label = "Insertion Sort")
+        
+        # naming the x axis
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Experiment 2 Graph')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+        
+        
 
 # ******************* Run the Experiment *******************
 
 run_experiment1(False)
-run_experiment2(True)
+run_experiment2(False)
 experiment3(False)
+run_experiment8(True)
