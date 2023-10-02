@@ -98,6 +98,18 @@ def run_experiment1(run):
         list3 = create_random_list(x[2],maxVal)
         list4 = create_random_list(x[3],maxVal)
 
+        #Running Selection Sort
+        print("SELECTION SORT TEST")
+        e=measure_time(selection_sort,list1)
+        f=measure_time(selection_sort,list2)
+        g=measure_time(selection_sort,list3)
+        h=measure_time(selection_sort,list4)
+
+        y2= [e,f,g,h]
+        # plotting the points 
+        plt.plot(x, y2, label = "Selection Sort")
+        
+        
         #Running Insertion Sort
         print("INSERTION SORT TEST")
         a=measure_time(insertion_sort,list1)
@@ -109,16 +121,6 @@ def run_experiment1(run):
         # plotting the points 
         plt.plot(x, y1, label = "Insertion Sort")
 
-        #Running Selection Sort
-        print("SELECTION SORT TEST")
-        e=measure_time(selection_sort,list1)
-        f=measure_time(selection_sort,list2)
-        g=measure_time(selection_sort,list3)
-        h=measure_time(selection_sort,list4)
-
-        y2= [e,f,g,h]
-        # plotting the points 
-        plt.plot(x, y2, label = "Selection Sort")
         
         #Running Bubble Sort
         print("BUBBLE SORT TEST")
@@ -570,7 +572,7 @@ def run_experiment8(run):
 
 # ******************* Run the Experiment *******************
 
-run_experiment1(False)
+run_experiment1(True)
 run_experiment2(False)
 experiment3(False)
-run_experiment8(True)
+run_experiment8(False)

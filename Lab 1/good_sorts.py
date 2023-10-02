@@ -18,6 +18,18 @@ def create_random_list(length, max_value):
     print("test")
     return [random.randint(0, max_value) for _ in range(length)]
 
+#function to measure time taken for algorithm to run
+def measure_time(sort_function,list):
+    copy_list = list.copy()
+    start_time = time.time()
+    sort_function(copy_list)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    print(execution_time)
+    return execution_time
+
+
 # ************ Quick Sort ************
 def quicksort(L):
     copy = quicksort_copy(L)
@@ -213,6 +225,66 @@ def experiment4(run):
         plt.show()
 
 
+def experiment7(run):
+    def bottom_up_mergesort(arr):
+        n = len(arr)
+        width = 1
+
+        while width < n:
+            for i in range(0, n, 2 * width):
+                left = arr[i:i + width]
+                right = arr[i + width:i + 2 * width]
+                merged = merge(left, right)
+                arr[i:i + 2 * width] = merged
+
+            width *= 2
+            
+    if run:
+        #Creating Lists of Different Lengths
+        x = [10,100,1000,10000] #array of the list lengths
+        maxVal = 100 #max value of list length
+
+        list1 = create_random_list(x[0],maxVal) 
+        list2 = create_random_list(x[1],maxVal)
+        list3 = create_random_list(x[2],maxVal)
+        list4 = create_random_list(x[3],maxVal)
+        
+        
+        
+        print("MERGE SORT TEST")
+        e=measure_time(mergesort,list1)
+        f=measure_time(mergesort,list2)
+        g=measure_time(mergesort,list3)
+        h=measure_time(mergesort,list4)
+        
+        y2= [e,f,g,h]
+        
+        plt.plot(x, y2, label = "Merge Sort")
+        
+        print("INSERTION SORT TEST")
+        a=measure_time(bottom_up_mergesort,list1)
+        b=measure_time(bottom_up_mergesort,list2)
+        c=measure_time(bottom_up_mergesort,list3)
+        d=measure_time(bottom_up_mergesort,list4)
+
+        y1= [a,b,c,d]
+        # plotting the points 
+        plt.plot(x, y1, label = "Bottom Up Merge Sort")
+        
+        # naming the x axis
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Experiment 7 Graph')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
 # ============
 
-experiment4(True)
+experiment4(False)
+experiment7(True)
