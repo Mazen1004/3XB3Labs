@@ -416,7 +416,7 @@ def experiment3(run):
         plt.plot(listLength,bubbleSortOutput,label = "Bubble Sort")
         plt.plot(listLength,selectionSortOutput,label = "Selection Sort")
 
-        plt.yticks(np.arange(min(bubbleSortOutput), max(bubbleSortOutput)+1, 0.25))
+        # plt.yticks(np.arange(min(bubbleSortOutput), max(bubbleSortOutput)+1, 0.25))
 
         plt.xlabel('List Length')
         # naming the y axis
@@ -437,7 +437,7 @@ def experiment3(run):
         plt.plot(listSwaps,bubbleSortOutput2,label = "Bubble Sort")
         plt.plot(listSwaps,selectionSortOutput2,label = "Selection Sort")
 
-        plt.yticks(np.arange(0, max(bubbleSortOutput)+1, 1))
+        #plt.yticks(np.arange(0, max(bubbleSortOutput)+1, 1))
 
         plt.xlabel('Number of Swaps')
         # naming the y axis
@@ -572,7 +572,7 @@ def run_experiment8(run):
 
 # ******************* Run the Experiment *******************
 
-run_experiment1(True)
+run_experiment1(False)
 run_experiment2(False)
 experiment3(False)
 run_experiment8(False)
