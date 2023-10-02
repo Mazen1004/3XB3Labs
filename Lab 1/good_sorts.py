@@ -13,10 +13,26 @@ import random
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+import sys 
+
+sys.setrecursionlimit(1000000)
+
+def swap(L, i, j):
+    L[i], L[j] = L[j], L[i]
+
 
 def create_random_list(length, max_value):
     print("test")
     return [random.randint(0, max_value) for _ in range(length)]
+
+def create_near_sorted_list(length, max_value, swaps):
+    L = create_random_list(length, max_value)
+    L.sort()
+    for _ in range(swaps):
+        r1 = random.randint(0, length - 1)
+        r2 = random.randint(0, length - 1)
+        swap(L, r1, r2)
+    return L
 
 #function to measure time taken for algorithm to run
 def measure_time(sort_function,list):
@@ -51,6 +67,73 @@ def quicksort_copy(L):
 
 # *************************************
 
+
+
+#=================== dual piv quicksort ====================
+
+def dualPivQuickSort(arr, low, high):
+      
+    if low < high:
+          
+    
+        lp, rp = partition(arr, low, high)
+        
+        # recursively sort left arr
+        dualPivQuickSort(arr, low, lp - 1)
+    
+        #middle
+        dualPivQuickSort(arr, lp + 1, rp - 1)
+        
+        #right
+        dualPivQuickSort(arr, rp + 1, high)
+          
+def partition(arr, low, high):
+    
+
+    #going to choose first element and last element as left and right pivots
+    #left pivot must always be smaller than right pivot
+    if arr[low] > arr[high]:
+        arr[low], arr[high] = arr[high], arr[low]
+          
+    # p is the left pivot, and q is the right pivot.
+    newLeftPiv = low + 1
+    leftStarting = low + 1
+    newRightPiv = high - 1 
+    leftPivot  = arr[low]
+    rightPivot = arr[high]
+      
+    while leftStarting <= newRightPiv:
+          
+        # If elements are less than the left pivot
+        if arr[leftStarting] <leftPivot:
+            arr[leftStarting], arr[newLeftPiv] = arr[newLeftPiv], arr[leftStarting]
+            newLeftPiv += 1
+              
+        # If elements are greater than or equal 
+        # to the right pivot
+        elif arr[leftStarting] >= rightPivot:
+            while arr[newRightPiv] > rightPivot and leftStarting < newRightPiv:
+                newRightPiv -= 1
+                  
+            arr[leftStarting], arr[newRightPiv] = arr[newRightPiv], arr[leftStarting]
+            newRightPiv -= 1
+              
+            if arr[leftStarting] < leftPivot:
+                arr[leftStarting], arr[newLeftPiv] = arr[newLeftPiv], arr[leftStarting]
+                newLeftPiv += 1
+                  
+        leftStarting += 1
+          
+    newLeftPiv -= 1
+    newRightPiv += 1
+      
+    # Bring pivots to their appropriate positions.
+    arr[low], arr[newLeftPiv] = arr[newLeftPiv], arr[low]
+    arr[high], arr[newRightPiv] = arr[newRightPiv], arr[high]
+      
+    # Returning the indices of the pivots
+    return newLeftPiv, newRightPiv
+            
 
 # ************ Merge Sort *************
 
@@ -225,6 +308,105 @@ def experiment4(run):
         plt.show()
 
 
+def experiment5(run):
+
+    if run:
+        numSwaps = [100000,10000,1000,100]
+
+        quickSortOutput = []
+        mergeSortOutput = []
+        heapSortOutput = []
+
+        for swaps in numSwaps:
+            nearSortList = create_near_sorted_list(100000,100000,swaps)
+
+            quick_sort_runtime = runTimeTimer(quicksort, nearSortList)
+            merge_sort_runtime = runTimeTimer(mergesort, nearSortList)
+            heap_sort_runtime = runTimeTimer(heapsort, nearSortList)
+
+            quickSortOutput.append(quick_sort_runtime)
+            mergeSortOutput.append(merge_sort_runtime)
+            heapSortOutput.append(heap_sort_runtime)
+
+        plt.plot(numSwaps,quickSortOutput,label = "Quick Sort")
+        plt.plot(numSwaps,mergeSortOutput,label = "Merge Sort")
+        plt.plot(numSwaps,heapSortOutput,label = "Heap Sort")
+
+        plt.yticks(np.arange(min(mergeSortOutput), max(quickSortOutput)+1, 1))
+
+        plt.xlabel('Number of Swaps')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Variable Swaps and Constant List Length')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+
+
+def dualPivRunTimeCalculator(arr,length):
+    copy = arr.copy()
+    start_time = time.time()
+    
+    # Call the sorting algorithm on the nearSortList
+    dualPivQuickSort(copy,0,length)
+
+    # Record the end time
+    end_time = time.time()
+
+    # Calculate the runtime
+    runtime = end_time - start_time
+
+    # Return the sorted list and the runtime
+    print(runtime)
+    return runtime
+
+
+def experiment6(run):
+    if run:
+        listLength = [100,1000,10000,100000]
+
+        
+
+        quickSortOutput = []
+        dualQuickSortOutput = []
+
+        for lengths in listLength:
+            randomList=  create_random_list(lengths,100000)
+        
+            quick_sort_runtime = runTimeTimer(quicksort, randomList)
+            dualPivQuickSortRuntime = dualPivRunTimeCalculator(randomList,len(randomList)-1)
+
+            quickSortOutput.append(quick_sort_runtime)
+            dualQuickSortOutput.append(dualPivQuickSortRuntime)
+
+        plt.plot(listLength,quickSortOutput,label = "Quick Sort")
+        plt.plot(listLength,dualQuickSortOutput,label = "Dual Pivot Quick Sort")
+        
+
+        plt.yticks(np.arange(min(quickSortOutput), max(dualQuickSortOutput)+1, 0.025))
+
+        plt.xlabel('List Length')
+        # naming the y axis
+        plt.ylabel('Time(s)')
+        
+        # giving a title to my graph
+        plt.title('Quick Sort vs Dual Pivot Quick Sort')
+
+        # show a legend on the plot
+        plt.legend()
+        
+        # function to show the plot
+        plt.show()
+
+
+
+
+
 def experiment7(run):
     def bottom_up_mergesort(arr):
         n = len(arr)
@@ -286,5 +468,4 @@ def experiment7(run):
         plt.show()
 # ============
 
-experiment4(False)
-experiment7(True)
+experiment4(True)
