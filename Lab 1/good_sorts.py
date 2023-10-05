@@ -292,7 +292,7 @@ def experiment4(run):
         plt.plot(listLength,mergeSortOutput,label = "Merge Sort")
         plt.plot(listLength,heapSortOutput,label = "Heap Sort")
 
-        plt.yticks(np.arange(min(heapSortOutput), max(heapSortOutput)+1, 0.25))
+        # plt.yticks(np.arange(min(heapSortOutput), max(heapSortOutput)+1, 0.25))
 
         plt.xlabel('List Length')
         # naming the y axis
@@ -388,7 +388,7 @@ def experiment6(run):
         plt.plot(listLength,dualQuickSortOutput,label = "Dual Pivot Quick Sort")
         
 
-        plt.yticks(np.arange(min(quickSortOutput), max(dualQuickSortOutput)+1, 0.025))
+        #plt.yticks(np.arange(min(quickSortOutput), max(dualQuickSortOutput)+1, 0.025))
 
         plt.xlabel('List Length')
         # naming the y axis
@@ -468,4 +468,7 @@ def experiment7(run):
         plt.show()
 # ============
 
-experiment4(True)
+experiment4(False)
+experiment5(False)
+experiment6(False)
+experiment7(False)
