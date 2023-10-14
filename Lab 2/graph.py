@@ -22,8 +22,8 @@ class Graph:
             self.adj[node1].append(node2)
             self.adj[node2].append(node1)
 
-    def number_of_nodes():
-        return len()
+    def number_of_nodes(self):
+        return len(self.adj)
 
 
 #Breadth First Search
@@ -91,3 +91,62 @@ def MVC(G):
     return min_cover
 
 
+#------------------------ PART 1 -------------------------#
+
+"""
+            0
+          / /              
+         1  2
+           /
+          3
+         /
+        4           5(not connected)
+"""
+print("CREATING GRAPH")
+Graph1=Graph(6)
+Graph1.add_edge(0,1)
+Graph1.add_edge(0,2)
+Graph1.add_edge(2,3)
+Graph1.add_edge(3,4)
+Graph1.are_connected(1,2)
+print(Graph1.number_of_nodes()) 
+
+def BFS2(G, node1, node2):
+    Q = deque([(node1, [node1])])  # Queue now stores tuples (node, path)
+    marked = {node1: True}
+
+    while Q:
+        current_node, path = Q.popleft()
+
+        if current_node == node2:
+            # We found node2, return the path taken
+            return path
+
+        for neighbor in G.adj[current_node]:
+            if not marked.get(neighbor, False):
+                marked[neighbor] = True
+                new_path = path + [neighbor]  # Create a new path by appending the neighbor
+                Q.append((neighbor, new_path))
+
+    return []  # Return an empty list if no path is found
+
+def DFS2(G, node1, node2):
+    S = [(node1, [node1])]  # Stack stores tuples (node, path)
+    marked = {node1: True}
+
+    while S:
+        current_node, path = S.pop()
+
+        if current_node == node2:
+            # We found node2, return the path taken
+            return path
+
+        for neighbor in G.adj[current_node]:
+            if not marked.get(neighbor, False):
+                marked[neighbor] = True
+                new_path = path + [neighbor]  # Create a new path by appending the neighbor
+                S.append((neighbor, new_path))
+
+    return []  # Return an empty list if no path is found
+
+print(DFS2(Graph1,0,4))
