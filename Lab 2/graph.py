@@ -149,4 +149,39 @@ def DFS2(G, node1, node2):
 
     return []  # Return an empty list if no path is found
 
-print(DFS2(Graph1,0,4))
+def BFS3(G, startNode):
+    Q = deque([startNode])
+    path_dictionary = {}
+    while len(Q) != 0:
+        #print("Queue is:" ,Q)
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            #Check if node is not starting node and not already in dictionary
+            if node != startNode and node not in path_dictionary: 
+                path_dictionary[node] = current_node
+                #print(path_dictionary)
+                Q.append(node)
+                
+    return path_dictionary       
+
+
+def DFS3(G, startNode):
+    S = [startNode]
+    path_dictionary = {}
+    marked = {}
+    for node in G.adj:
+        marked[node] = False
+    while len(S) != 0:
+        #print("Stack is:", S)
+        current_node = S.pop()
+        #print("Exploring: ", current_node)
+        if not marked[current_node]:
+            marked[current_node] = True
+            for node in G.adj[current_node]:
+                if node != startNode and node not in path_dictionary:
+                    path_dictionary[node] = current_node
+                    #print(path_dictionary)
+                S.append(node)
+                
+    return path_dictionary
+print(DFS3(Graph1,0))
