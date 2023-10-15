@@ -108,6 +108,7 @@ Graph1.add_edge(0,1)
 Graph1.add_edge(0,2)
 Graph1.add_edge(2,3)
 Graph1.add_edge(3,4)
+Graph1.add_edge(1,3) #This lines creates a cycle in graph
 Graph1.are_connected(1,2)
 print(Graph1.number_of_nodes()) 
 
@@ -184,4 +185,51 @@ def DFS3(G, startNode):
                 S.append(node)
                 
     return path_dictionary
-print(DFS3(Graph1,0))
+
+#For this function, inefficient to use BFS or DFS code
+def is_connected(G):
+    #Loop through each item in dictionary e.g (0,[1,2])
+    for values in G.adj.items(): 
+        print(values)
+        print(G.adj.items())
+        if not values:
+            return False
+    return True
+
+def has_cycle(G):
+    #Get starting node for DFS search
+    startNode = list(G.adj.keys())[0]
+    #path dictionary has parent nodes of each node
+    path_dictionary = DFS3(G,startNode)
+    
+    #Loop through path dictionary
+    for node, parent in path_dictionary.items():       
+        #if parent value is smaller than node, this mean there should only be one value
+        #smaller than node if there is no cycles
+        if parent < node:
+            node_adjacency = G.adj[node]
+            #print("node_adj",node_adjacency)
+            count = 0
+            for node in node_adjacency:
+                if node <= parent:  
+                    count += 1
+            if count > 1:
+                #means there is more than one parent (cycle)
+                return True
+            #print("Test",node_adjacency)
+        #if parent value is greater than node, this mean there should only be one value
+        #greater than node if there is no cycles
+        if parent > node:
+            node_adjacency = G.adj[node]
+            count = 0
+            for node in node_adjacency:
+                if node >= parent:
+                    count += 1
+            if count > 1:
+                #means there is more than one parent (cycle)
+                return True
+    #print(G.adj)            
+    return False
+    
+
+print(has_cycle(Graph1))
