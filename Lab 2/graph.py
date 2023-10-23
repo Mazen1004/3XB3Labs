@@ -191,8 +191,8 @@ def DFS3(G, startNode):
 def is_connected(G):
     #Loop through each item in dictionary e.g (0,[1,2])
     for values in G.adj.items(): 
-        print(values)
-        print(G.adj.items())
+        # print(values)
+        # print(G.adj.items())
         if not values:
             return False
     return True
