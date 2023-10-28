@@ -1,4 +1,5 @@
 from collections import deque
+import copy
 import random
 
 #Undirected graph using an adjacency list
@@ -82,7 +83,7 @@ def is_vertex_cover(G, C):
     return True
 
 def MVC(G):
-    nodes = [i for i in range(G.get_size())]
+    nodes = [i for i in range(len(G.adj))]
     subsets = power_set(nodes)
     min_cover = nodes
     for subset in subsets:
@@ -237,61 +238,48 @@ def has_cycle(G):
 
 #------------------------- Approximations --------------------------#
 
-def approx1_helper(G_copy, C):
-    #Max Degree Count
-    max_degree_count = -1
-    #Highest degree vertex v
-    v = None
-    #Loops through adjacent list and finds highest degree vertex
-    for node, adjacent_nodes in G_copy.adj.items():
-        adjacent_count = len(adjacent_nodes)
-        if adjacent_count > max_degree_count:
-            v = node
-            max_degree_count = adjacent_count
-            #Set to store adjacency nodes/edges that will be deleted from copy_graph
-            adjacent_set = set(adjacent_nodes)
-            print("test 1",adjacent_set)
-    G_copy.adj.pop(v)
-    #Adds highest degree vertex to Vertex Cover Set C        
-    C.add(v)
-    print(C)
-
-    #Removing all adjacent nodes from copy graph
-    for adjacent_node in adjacent_set:
-        print("test 2", adjacent_node)
-        #Checks to see if node not already popped
-        if adjacent_node in G_copy.adj:
-            G_copy.adj.pop(adjacent_node)
-        
-    print(G_copy.adj)
     
 def approx1(G):
     #Copy input graph
-    G_copy = G
+    G_copy = copy.deepcopy(G)
     #Initalize Set C
     C= set()
-    print(G_copy.adj)
     
-    while not is_vertex_cover(G_copy, C):
-        approx1_helper(G_copy, C)
-    return C
+    while G_copy.adj:  # while there are nodes in the graph_copy
+        # find the vertex with the highest degree in graph_copy
+        max_degree_node = None
+        max_degree = -1
+        for node in G_copy.adj:
+            degree = len(G_copy.adj[node])
+            if degree > max_degree:
+                max_degree = degree
+                max_degree_node = node
+        C.add(max_degree_node)  # add to the vertex cover set 
 
+        # remove all incident edges
+        neighbors = list(G_copy.adj[max_degree_node])
+        for neighbor in neighbors:
+            G_copy.adj[max_degree_node].remove(neighbor)
+            G_copy.adj[neighbor].remove(max_degree_node)
+
+        # remove node
+        del G_copy.adj[max_degree_node]
+
+    return C
 
 def approx2_helper(G_copy, C):
     #Get random vertex v
     while True:
         v = random.choice(list(G_copy.adj.keys()))
-        print(v)
         if v not in C:
             break
         
     #add v to Vertex Cover Set C
     C.add(v)
     
-
 def approx2(G):  
     #Copy input graph
-    G_copy = G
+    G_copy = copy.deepcopy(G)
     #Initalize Set C
     C= set()
     
@@ -301,46 +289,35 @@ def approx2(G):
 
 def approx3_helper(G_copy, C):  
     #Generate random edge pair (u,v)
-    u = random.choice(list(G_copy.adj.keys()))
-    print("val 1", u)
-    adjacent_nodes = G_copy.adj[u]
-    v = random.choice(adjacent_nodes)
-    print("val 2", v)
+    #First find pairs that have edges
+    edges = []
+    for u in G_copy.adj:
+        for v in G_copy.adj[u]:
+            edges.append((u, v))
+            
+    if not edges:
+        return  # if there no more edges left to add
+    
+    (u, v) = random.choice(edges)  #select random edge
+    C.add(u)  
+    C.add(v)  
+    
+    # remove all edges incident u or v 
+    for node in G_copy.adj[u]:
+        G_copy.adj[node].remove(u)
+    for node in G_copy.adj[v]:
+        G_copy.adj[node].remove(v)
+    del G_copy.adj[u]
+    del G_copy.adj[v]
 
-    C.add(u)
-    C.add(v)
-    print(C)
-    
-    #Removing nodes/edges incident to u or v from G_copy
-    adjacent_set = set()
-    values = G_copy.adj[u]
-    for value in values:
-        adjacent_set.add(value)
-        
-    values2 = G_copy.adj[v]     
-    for value in values2:
-        adjacent_set.add(value)
-    print("test 101", adjacent_set)    
-    G_copy.adj.pop(u)
-    G_copy.adj.pop(v)
-    
-     #Removing all adjacent nodes from copy graph
-    for adjacent_node in adjacent_set:
-        print("test 2", adjacent_node)
-        #Checks to see if node not already popped
-        if adjacent_node in G_copy.adj:
-            G_copy.adj.pop(adjacent_node)
-    
 
 def approx3(G):  
     #Copy input graph
     G_copy = G
     #Initalize Set C
     C= set()
-    print(G.adj)
     while not is_vertex_cover(G_copy, C):
         approx3_helper(G_copy, C)
     return C  
 
    
-print("nelp",approx3(Graph1))
