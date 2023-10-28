@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 def createRandomGraph(i,j):
 
     # if the number of edges is greater than the number of possible node connections (without duplicates) then we cannot create a list without duplicate edges
+    # n Choose 2 max possible connections
     if j > (i * (i - 1)) // 2:
         raise ValueError("Too many edges for the given number of nodes")
 
@@ -20,7 +21,7 @@ def createRandomGraph(i,j):
         node1 = random.choice(nodes)
         node2 = random.choice(nodes)
 
-        # Skip if the same edge or duplicate edge is found
+        # Skip current iteration if the same edge or duplicate edge is found
         if node1 == node2 or graph.are_connected(node1, node2):
             continue  
         

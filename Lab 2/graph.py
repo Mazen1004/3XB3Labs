@@ -82,7 +82,7 @@ def is_vertex_cover(G, C):
     return True
 
 def MVC(G):
-    nodes = [i for i in range(G.get_size())]
+    nodes = [i for i in range(G.number_of_nodes())]
     subsets = power_set(nodes)
     min_cover = nodes
     for subset in subsets:
@@ -90,6 +90,85 @@ def MVC(G):
             if len(subset) < len(min_cover):
                 min_cover = subset
     return min_cover
+
+
+
+
+# ============== Max Independent Set =====================
+
+def createRandomGraph(i,j):
+
+    # if the number of edges is greater than the number of possible node connections (without duplicates) then we cannot create a list without duplicate edges
+    if j > (i * (i - 1)) // 2:
+        raise ValueError("Too many edges for the given number of nodes")
+
+    graph = Graph(i)
+
+    # generates a list of i nodes
+    nodes = list(range(i))
+    edge_count = 0
+
+    while edge_count < j:
+        node1 = random.choice(nodes)
+        node2 = random.choice(nodes)
+
+        # Skip if the same edge or duplicate edge is found
+        if node1 == node2 or graph.are_connected(node1, node2):
+            continue  
+        
+        graph.add_edge(node1, node2)
+        edge_count += 1
+
+    return graph
+
+
+def isIndependentSet(G,S):
+    for start in range(len(S)):
+        for end in range(start+1,len(S)):
+            if G.are_connected(S[start],S[end]):
+                return False
+    return True
+
+# similar to MVC
+def MIS(G):
+
+    nodes = [i for i in range(G.number_of_nodes())]
+    subSets = power_set(nodes)
+    maxIndependentSet = []
+
+    for subset in subSets: 
+        # skip checking the subset if its length is less than the maxIndependentSet
+        if len(subset) < len(maxIndependentSet):
+                continue
+        if(isIndependentSet(G,subset)):
+
+            if len(subset) > len(maxIndependentSet):
+                    maxIndependentSet = subset
+
+    
+    return maxIndependentSet
+
+
+def MISvsMVC():
+    numGraphs = 5
+
+    for i in range(numGraphs):
+        graph = createRandomGraph(20,40)
+
+        minVertexCover = MVC(graph)
+        maxIndependentSet = MIS(graph)
+
+        print("Min Vertex Cover: ",minVertexCover)
+        print("Max Independent Set: ",maxIndependentSet)
+
+        sum = len(minVertexCover) + len(maxIndependentSet)
+        print("Number of nodes in graph ",graph.number_of_nodes()," Sum of length of MVC and MIS ",sum)
+
+
+MISvsMVC()        
+
+
+
 
 
 #------------------------ PART 1 -------------------------#
