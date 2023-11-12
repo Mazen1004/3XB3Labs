@@ -46,35 +46,25 @@ def ks_rec(items, capacity):
         profit1 = ks_rec(items[1:], capacity)
         profit2 = items[0][1] + ks_rec(items[1:], capacity - items[0][0]) 
         return max(profit1,profit2)
-            
-def ks_bottom_up1(items, capacity):
+
+def ks_bottom_up(items, capacity):
     #Creating array to define
     memo = []
-    for _ in range(len(items)):
-        memo.append([None] * (capacity + 1))
+    for _ in range(len(items)+1):
+        memo.append([0] * (capacity + 1))
     
-    
-
-def ks_bottom_up(item_list, max_weight):
-    print(item_list)
-    N = len(item_list)
-    memo = [[0 for _ in range(max_weight + 1)] for _ in range(N + 1)]
-    print(memo)
-
-    for i in range(1, N + 1):
-        wi, vi = item_list[i - 1]
-        for j in range(1, max_weight + 1):
-            # take
-            op1 = 0
-            if j - wi >= 0:
-                op1 = memo[i - 1][j - wi] + vi
-
-            # don't take
-            op2 = memo[i - 1][j]
-
-            memo[i][j] = max(op1, op2)
-    print(memo)
-    return memo[N][max_weight]
+    #Loop through each item and capacity
+    for i in range(1, len(items) + 1):
+        for j in range(1, capacity + 1):
+            if j < items[i-1][0]:
+                memo[i][j] = memo[i - 1][j]
+            else:
+                profit1 = memo[i - 1][j]
+                profit2 = items[i - 1][1] + memo[i - 1][j - items[i-1][0]]
+                memo[i][j] = max(profit1,profit2)
+    #print("memo 2")
+    #print(memo)
+    return memo[len(items)][capacity]       
 
 def ks_top_down(items, capacity):
     #Creating array to define
@@ -120,23 +110,13 @@ def ks_top_down(items, capacity):
     return ks_top_down_recursive(len(items) - 1, capacity)
 
 
-    
-#items1 = random_set_generator(5,50,5)
-#print(items)
-
-items = [(1,1),(3,4),(4,5),(5,7)]
-#print(ks_brute_force(items,7))
-#print(ks_bottom_up(items,7))
-#print(ks_top_down(items, 7))
-#print(ks_rec(items, 7))
-
-def exp1():
+def exp1(max_list_size, min_weight, max_weight, min_profit, max_profit):
     list_size_array = []
     ks_brute_force_array = []
     ks_rec_array = []
-    for list_size in range(15):
+    for list_size in range(max_list_size):
         list_size_array.append(list_size)
-        items_list = random_set_generator(list_size, 50, 75, 1000, 2000)
+        items_list = random_set_generator(list_size, min_weight, max_weight, min_profit, max_profit)
         #Time for Brute Force
         start_time1 = time.time()
         ks_brute_force(items_list,200)
@@ -162,4 +142,51 @@ def exp1():
     plt.legend()
     plt.show()
     
-exp1()
+def exp2(max_list_size, min_weight, max_weight, min_profit, max_profit):
+    list_size_array = []
+    ks_top_down_array = []
+    ks_bottom_up_array = []
+    capacity = 100
+    for list_size in range(max_list_size):
+        list_size_array.append(list_size)
+        items_list = random_set_generator(list_size, min_weight, max_weight, min_profit, max_profit)
+        #Time for Top Down
+        start_time1 = time.time()
+        ks_top_down(items_list,capacity)
+        end_time1 = time.time()
+        execution_time_top_down = end_time1 - start_time1
+        ks_top_down_array.append(execution_time_top_down)
+        #Time for Recursion
+        start_time2 = time.time()
+        ks_bottom_up(items_list,capacity)
+        end_time2 = time.time()
+        execution_time_bottom_up = end_time2 - start_time2
+        ks_bottom_up_array.append(execution_time_bottom_up)
+    print("List size ", list_size_array)
+    print("Bottom Up ", ks_bottom_up_array)
+    print("Top Down ", ks_top_down_array)
+    
+    #Creating Result Graph
+    plt.plot(list_size_array, ks_top_down_array, label = "Knapsack Top Down")
+    plt.plot(list_size_array, ks_bottom_up_array, label = "Knapsack Buttom Up")
+    plt.xlabel('List Length')
+    plt.ylabel('Time(s) Performance')
+    plt.title('Experiment 2 Graph')
+    plt.legend()
+    plt.show()
+    
+#--------------- EXPERIMENT RUNNER ---------------#
+#items1 = random_set_generator(5,50,5)
+#print(items)
+
+#items = [(1,1),(3,4),(4,5),(5,7)]
+#print(ks_brute_force(items,7))
+#print(ks_bottom_up(items,7))
+#print(ks_top_down(items, 7))
+#print(ks_rec(items, 7))
+
+#Shows Top Down Better
+#exp2(100,50,75,1000,2000)
+
+#Shows Bottom Up Better
+#exp2(40,50,75,1000,10000)
