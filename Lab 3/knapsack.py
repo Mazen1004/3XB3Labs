@@ -114,18 +114,19 @@ def exp1(max_list_size, min_weight, max_weight, min_profit, max_profit):
     list_size_array = []
     ks_brute_force_array = []
     ks_rec_array = []
+    capacity = 200
     for list_size in range(max_list_size):
         list_size_array.append(list_size)
         items_list = random_set_generator(list_size, min_weight, max_weight, min_profit, max_profit)
         #Time for Brute Force
         start_time1 = time.time()
-        ks_brute_force(items_list,200)
+        ks_brute_force(items_list,capacity)
         end_time1 = time.time()
         execution_time_brute_force = end_time1 - start_time1
         ks_brute_force_array.append(execution_time_brute_force)
         #Time for Recursion
         start_time2 = time.time()
-        ks_rec(items_list,200)
+        ks_rec(items_list,capacity)
         end_time2 = time.time()
         execution_time_rec = end_time2 - start_time2
         ks_rec_array.append(execution_time_rec)
@@ -185,8 +186,10 @@ def exp2(max_list_size, min_weight, max_weight, min_profit, max_profit):
 #print(ks_top_down(items, 7))
 #print(ks_rec(items, 7))
 
+#exp1(10,50,75,1000,2000)
+
 #Shows Top Down Better
 #exp2(100,50,75,1000,2000)
 
 #Shows Bottom Up Better
-#exp2(40,50,75,1000,10000)
+#exp2(200,50,75,1000,2000)
