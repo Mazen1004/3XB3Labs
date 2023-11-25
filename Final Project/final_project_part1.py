@@ -227,17 +227,14 @@ def bellman_ford_approx(G, source, k):
     return dist
 
 
-def experiment_suite1():
+def experiment_1():
     #Loop to generate a graphs that get more dense with time
     #After each graph is generated it is run through each of the 4 algorithms
     #Time duration plotted vs number of edges
-    #n(n-1)/2  
-    max_number_of_edges = 200
-    number_of_nodes = 20
+    number_of_nodes = 50
+    #Calculation of min/max edges for connected graph
     min_number_of_edges = int(number_of_nodes-1)
-    print(min_number_of_edges)
     max_number_of_edges = int((number_of_nodes*(number_of_nodes-1))/2)
-    print(max_number_of_edges)
     max_relax_count = 1
     number_of_nodes_array = []
     dijkstra_approx_array = []
@@ -268,13 +265,13 @@ def experiment_suite1():
     plt.legend()
     plt.show()
     
-def experiment_suite2():
+def experiment_2():
     #Create a complete graph of size 50
     #Run the Graph through each of the 4 Algorithms
     #In each loop the value of k (relaxation limit is adjusted) until max_k is reached
     #Result of total distance is plotted against number values of k
     number_of_nodes = 50
-    max_k = 15
+    max_k = 10
     k_array = []
     dijkstra_approx_array = []
     dijkstra_array = []
@@ -308,7 +305,7 @@ def experiment_suite2():
     plt.legend()
     plt.show()
 
-def experiment_suite3():
+def experiment_3():
     #Experiment Summary:
     #Loop to generate a graphs that increase in size upto max_number_of_nodes
     #After each graph is generated it is run through each of the 4 algorithms
@@ -350,7 +347,7 @@ def experiment_suite3():
     plt.show()
     
 def mystery_algorithm_experiment():
-    max_number_of_nodes = 50
+    max_number_of_nodes = 300
     number_of_nodes_array = []
     mystery_array = []
     for number_of_nodes in range(1,max_number_of_nodes+1):
@@ -360,12 +357,20 @@ def mystery_algorithm_experiment():
         start_time1 = time.time()
         mystery(Graph)
         end_time1 = time.time() 
-        mystery_array.append(end_time1-start_time1)
+        execution_time = end_time1 - start_time1
+        execution_time = max(execution_time, 1e-9)  # Replace zero with a small number
+        mystery_array.append(execution_time)
         
     #Creating Result Graph
     log_x = np.log(number_of_nodes_array)
     log_y = np.log(mystery_array)
-    slope =(log_x/log_y)
+    
+    print("time =", mystery_array)
+    print(log_x)
+    print(log_y)
+    # Fit a linear model to the log-transformed data
+    slope, _ = np.polyfit(log_x, log_y, 1)
+
     #slope = Stats.linregress(log_x, log_y)
     #slope, intercept, r_value, p_value, std_err = linregress(log_x, log_y)
     print("SLOPE IS: ", slope)
@@ -378,7 +383,7 @@ def mystery_algorithm_experiment():
  
 #------------------------------------------------------------EXPERIMENT RUNNER------------------------------------------------------------#       
 print("EXPERIMENT RUNNER: ")
-experiment_suite1()
-#experiment_suite2()
-#experiment_suite3()
+#experiment_1()
+#experiment_2()
+experiment_3()
 #mystery_algorithm_experiment()
