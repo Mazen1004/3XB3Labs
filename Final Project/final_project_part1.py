@@ -382,8 +382,8 @@ def mystery_algorithm_experiment():
     plt.show()
  
 #------------------------------------------------------------EXPERIMENT RUNNER------------------------------------------------------------#       
-print("EXPERIMENT RUNNER: ")
+#print("EXPERIMENT RUNNER: ")
 #experiment_1()
 #experiment_2()
-experiment_3()
+#experiment_3()
 #mystery_algorithm_experiment()
