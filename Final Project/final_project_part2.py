@@ -1,6 +1,6 @@
  
 import heapq
-import min_heap
+
 
 def a_star(G, s, d, h):
    
@@ -10,15 +10,16 @@ def a_star(G, s, d, h):
 
     #heap storing the first node with a distance of 0
     priorityQueue = [(0,s)]
-
+    heapq.heapify(priorityQueue)
+    
     nodes = list(G.adj.keys())
 
     for node in nodes:
         dist[node] = float("inf")
     
-    
+    dist[s] = 0
 
-    while priorityQueue:
+    while len(priorityQueue) > 0:
         currentVal, currentNode = heapq.heappop(priorityQueue)
 
         if currentNode == d:
@@ -48,36 +49,11 @@ def a_star(G, s, d, h):
                 pred[neighbour] = currentNode
     
     #no path exists between start and end node
-
+ 
     return None, None
 
-            
 
 
-def dijkstra(G, source):
-    pred = {} #Predecessor dictionary. Isn't returned, but here for your understanding
-    dist = {} #Distance dictionary
-    Q = min_heap.MinHeap([])
-    nodes = list(G.adj.keys())
 
-    #Initialize priority queue/heap and distances
-    for node in nodes:
-        Q.insert(min_heap.Element(node, float("inf")))
-        dist[node] = float("inf")
-    Q.decrease_key(source, 0)
 
-    #Meat of the algorithm
-    while not Q.is_empty():
-        current_element = Q.extract_min()
-        current_node = current_element.value
-        dist[current_node] = current_element.key
-        #Looping through all the neighbors of extracted element
-        for neighbour in G.adj[current_node]:
-            #If calculated distance is less than current distance stored for adjacent vertex from source code
-            if dist[current_node] + G.w(current_node, neighbour) < dist[neighbour]:
-                #Decrease value in min heap to new updated distance
-                Q.decrease_key(neighbour, dist[current_node] + G.w(current_node, neighbour))
-                #Update distance and pred tables
-                dist[neighbour] = dist[current_node] + G.w(current_node, neighbour)
-                pred[neighbour] = current_node
-    return dist
+
