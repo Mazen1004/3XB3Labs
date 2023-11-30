@@ -162,7 +162,7 @@ def experiment2Suite(londonStationGraph,londonStatHash):
         #A star executiom time is probably greater because it iterates through pred dictionary and forms a path
         Aexecutiontimes.append(a_starExeTime/aruns)
         
-        print(f"APSP A* execution time beginning at {station1} is: {a_starExeTime/(len(londonStatHash)*(len(londonStatHash) - 1))}")
+        print(f"APSP A* execution time beginning at {station1} is: {a_starExeTime/aruns}")
 
         #djiksta is getting shortest path globally, A* getting 1 shortest path, but the time it takes A* to get a single shortest path, is smaller than the time it takes to run Djikstra normally
         #but because we are getting every pairs shortest path, djikstra is faster, but if we try to get the
