@@ -45,6 +45,16 @@ class WeightedGraph(Graph):
     def w(self, node1, node2):
         if self.are_connected(node1, node2):
             return self.weights[(node1, node2)]
-         
+
+
+#when defining HeurisitcGraph need to pass in heuristic
 class HeuristicGraph(WeightedGraph):
-    def get_heuristic(): dict[int,float]
+    
+    def __init__(self,heuristic):
+        super().__init__()
+        self.h = heuristic 
+
+    def get_heuristic(self,node):
+        return self.h[node]
+
+
