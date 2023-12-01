@@ -50,10 +50,27 @@ def readConnectionFile(file_path):
         
     return data
 
+#use this hashmap, pass in a tuple as a key, and get the line val
+def getLineData(file_path):
+
+    data ={}
+
+    with open(file_path,'r') as csvfile:
+        
+        csv_reader = csv.DictReader(csvfile)
+
+        for row in csv_reader:
+            data[(int(row["station1"]),int(row["station2"]))] = int(row["line"])
+            data[(int(row["station2"]),int(row["station1"]))] = int(row["line"])
+
+    return data
+
 
 
 londonStationHash = readStationfile("../Final Project/part3/london_stations.csv")
 londonConnHash = readConnectionFile("../Final Project/part3/london_connections.csv")
+lineHash = getLineData("../Final Project/part3/london_connections.csv")
+print(lineHash)
 #print(londonStationHash[11])
 
 #use pythagorean theorem to solve distance between end node and every other node
@@ -101,7 +118,7 @@ def createLondonStationGraph(londonStatHash,londonConnHash):
     return stationGraph
 
 stationGraph = createLondonStationGraph(londonStationHash,londonConnHash)
-print(stationGraph.adj[11])
+#print(stationGraph.adj[11])
 #print(stationGraph.adj[26])
 
 def callAstar(G,s,d,londonStationHash):
@@ -117,9 +134,9 @@ def callAstar(G,s,d,londonStationHash):
     #print(pred)
     #print(path)
 
-    return execution_time
+    return execution_time,path
 
-callAstar(stationGraph,1,200,londonStationHash)
+#callAstar(stationGraph,1,200,londonStationHash)
 
 def callDjikstra(G,s):
     
@@ -134,6 +151,19 @@ def callDjikstra(G,s):
 
 #print("A:", callAstar(stationGraph,11,278,londonStationHash))
 #print("D:", callDjikstra(stationGraph,1))
+
+def getLineInfo(path, lineHash):
+    transfers = 0
+    for i in range(len(path) - 1):
+        current_pair = (path[i], path[i+1])
+        line = lineHash.get(current_pair, None)
+
+        if line is not None:
+            # Check if the current pair has a different line than the previous one
+            if i > 0 and line != lineHash[(path[i-1], path[i])]:
+                transfers += 1
+
+    return transfers
 
 
 #do another test without dividing
@@ -150,16 +180,30 @@ def experiment2Suite(londonStationGraph,londonStatHash):
         a_starExeTime = 0
 
         print(station1)
+        
+        #line = getLineInfo
 
         aruns = 0
+
+        #total number of transfers required to get from source node to every other node in the graph
+        total_transfersRequired = 0
         for station2 in orderedStations:
             if station1 != station2:
-                runTime = callAstar(londonStationGraph,station1,station2,londonStatHash)
+                runTime,path = callAstar(londonStationGraph,station1,station2,londonStatHash)
                 aruns += 1
-                a_starExeTime += runTime
+                
+                line_transfers = getLineInfo(path,lineHash)
 
+                #too much info to print each and every transfer for each pair of source/destination stations
+                #print(f"Number of line transfers in shortest path from {station1} to {station2}: {line_transfers} ")
+                a_starExeTime += runTime
+                total_transfersRequired += line_transfers
+
+        print(f"total number of line transfers in APSP with source: {station1}: {total_transfersRequired}")
+        
         #average time it takes to get a shortest path because we are doing trials over times run (effectively)
         #A star executiom time is probably greater because it iterates through pred dictionary and forms a path
+    
         Aexecutiontimes.append(a_starExeTime/aruns)
         
         print(f"APSP A* execution time beginning at {station1} is: {a_starExeTime/aruns}")
@@ -186,7 +230,12 @@ def experiment2Suite(londonStationGraph,londonStatHash):
     plt.legend()
     plt.show()
 
+    
+
+
 
 #print(callAstar(stationGraph,26,260,londonStationHash))
 
 experiment2Suite(stationGraph,londonStationHash)
+
+
