@@ -54,7 +54,7 @@ class HeuristicGraph(WeightedGraph):
         super().__init__()
         self.h = heuristic 
 
-    def get_heuristic(self,node):
-        return self.h[node]
+    def get_heuristic(self):
+        return self.h
 
 
