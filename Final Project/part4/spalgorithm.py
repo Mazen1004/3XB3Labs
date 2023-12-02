@@ -24,10 +24,10 @@ class Dijkstra(SPAlgorithm):
             current_node = current_element.value
             dist[current_node] = current_element.key
             # Looping through all the neighbors of extracted element
-            for neighbour in G.adj[current_node]:
-                if dist[current_node] + G.w(current_node, neighbour) < dist[neighbour]:
-                    Q.decrease_key(neighbour, dist[current_node] + G.w(current_node, neighbour))
-                    dist[neighbour] = dist[current_node] + G.w(current_node, neighbour)
+            for neighbour in graph.adj[current_node]:
+                if dist[current_node] + graph.w(current_node, neighbour) < dist[neighbour]:
+                    Q.decrease_key(neighbour, dist[current_node] + graph.w(current_node, neighbour))
+                    dist[neighbour] = dist[current_node] + graph.w(current_node, neighbour)
                     pred[neighbour] = current_node
 
         # Reconstruct the shortest path from source to destination
@@ -131,14 +131,4 @@ class A_Star(SPAlgorithm):
             return None, None
         
         heuristic = graph.get_heuristic()
-        return a_star(graph, source, dest, heuristic)
-        
-
-
-
-
-
-
-
-                
-            
+        return a_star(graph, source, dest, heuristic)     
